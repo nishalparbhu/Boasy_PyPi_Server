@@ -54,7 +54,7 @@ html above. In this folder you will also want to create a new `index.html` file 
   </head>
   <body>
     <h1>Links for package_name</h1>
-    <a href="git+{git_clone_link}@{branch_name}#egg={package-name}" data-requires-python="&gt;={python_version_required}">{package_name}-{version_number}</a><br/>
+    <a href="git+{ssh_git_clone_link}@{branch_name}#egg={package-name}" data-requires-python="&gt;={python_version_required}">{package_name}-{version_number}</a><br/>
   </body>
 </html>
 ```
@@ -62,7 +62,7 @@ html above. In this folder you will also want to create a new `index.html` file 
 All you need to do is replace the following:
 - **package_name** is just the package name with underscores as before
 - **package-name** is just the package name with hyphens as before
-- **git_clone_link** (e.g. https://github.com/nishalparbhu/Boasy_PyPi_Server.git)
+- **ssh_git_clone_link** (e.g. https://github.com/nishalparbhu/Boasy_PyPi_Server.git)
 - **branch_name**, this should be just the version number so for version 0.0.1 you should make a branch called v0.0.1
 and this is the value of the **branch_name** variable
 - **python_version_required** is the Python version needed to use this package
@@ -81,7 +81,7 @@ To add a new version of a package, simply find the folder of your package in thi
 ```html
   <body>
     <h1>Links for package_name</h1>
-    <a href="git+{git_clone_link}@{branch_name}#egg={package-name}" data-requires-python="&gt;={python_version_required}">{package_name}-{version_number}</a><br/>
+    <a href="git+{ssh_git_clone_link}@{branch_name}#egg={package-name}" data-requires-python="&gt;={python_version_required}">{package_name}-{version_number}</a><br/>
   </body>
 ```
 
