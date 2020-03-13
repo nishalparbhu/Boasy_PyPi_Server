@@ -2,9 +2,29 @@
 The source code for a Boasy Python package server for our internal packages which is hosted via Github pages.
 
 # Table of Contents
-1. [Creating a new package](#Creating-a-new-package)
-2. [Adding a new package](#Adding-a-new-package)
-3. [Adding a new version of a package](#Adding-a-new-version-of-a-package)
+1. [Downloading a new package](#Downloading-a-new-package)
+2. [Creating a new package](#Creating-a-new-package)
+3. [Adding a new package](#Adding-a-new-package)
+4. [Adding a new version of a package](#Adding-a-new-version-of-a-package)
+
+## Downloading a new package
+
+To download a package from this package index, you can do it directly from the command line as follows:
+
+```shell script
+pip install package_name --extra-index-url https://nishalparbhu.github.io/Boasy_PyPi_Server/
+```
+
+Or if you have a _requirements.txt_ file than you can just add the following two line to the file:
+
+```requirements.txt
+--extra-index-url https://nishalparbhu.github.io/Boasy_PyPi_Server/
+package_name==0.0.1
+```
+
+You will also need to make sure that you have a valid SSH deploy key which is required to install the package. If 
+you don't have one, you will need to get in contact with the owner of the package to see if they can grant you access to
+the package with a deploy key.
 
 ## Creating a new package
 
