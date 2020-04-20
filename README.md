@@ -4,6 +4,7 @@ The source code for a Boasy Python package server for our internal packages whic
 # Table of Contents
 1. [Downloading a new package](#Downloading-a-new-package)
 2. [Creating a new package](#Creating-a-new-package)
+   - [Guidelines](#Guidelines)
 3. [Adding a new package](#Adding-a-new-package)
 4. [Adding a new version of a package](#Adding-a-new-version-of-a-package)
 
@@ -24,21 +25,71 @@ package_name==0.0.1
 
 You will also need to make sure that you have a valid SSH deploy key which is required to install the package. If 
 you don't have one, you will need to get in contact with the owner of the package to see if they can grant you access to
-the package with a deploy key.
+the package with a deploy key. Once you have this deploy key, you will need to add it to your `~/.ssh` folder on your 
+machine and then you will need to have a file called `config` which also goes in that folder and should look like this:
+
+```text
+Host package_one.github.com
+    HostName github.com
+    User git
+    IdentityFile ~/.ssh/id_rsa
+    IdentitiesOnly yes
+
+Host package_two.github.com
+    HostName github.com
+    User git
+    IdentityFile ~/.ssh/id_rsa
+    IdentitiesOnly yes
+``` 
+
+You must have this `config` file so that when you install, your ssh client knows which key to use to get that package. 
+
+**[⬆ back to top](#table-of-contents)**
 
 ## Creating a new package
 
-When creating a new Python package for Boasy, it shouldn't be too dissimilar to any other Python package but we do have 
-the convention that each new version of your package should be released onto a new branch in the repo with the naming 
-structure as follows:
+When creating a new Python package for Boasy, it shouldn't be too dissimilar to any other Python package.
+ 
+We do have a few guidelines that we follow to make creating a package easy and safe which are listed below:
 
-For version 0.0.1, a new branch should be created called `v0.0.1`
+### Guidelines
 
-This should be repeated for any newer versions created as well as modifying the `setup.py` as well.
+- When creating a package, the workflow should go as follows:
+   - Your actual package file must use underscores for the spaces between words not hyphens (to work with pip)
+   - Your `master` branch is the production latest version of your package
+   - You then create a new version of the next version you want to release using the format `v[0-9].[0.9].[0-9]` 
+   (e.g. `v0.0.1`) which becomes your stable branch for building the next version
+   - You tag this branch using the git command `git tag -a v0.0.1 -m "Boasy Test Package v0.0.16"` which allows us to 
+   create a release on Github meaning others can see clearly your changelog for that release of the package
+   - You create your `feat-v0.0.1-my_new_change`, `refactor-v0.0.1-using_new_module`, `chore-v0.0.1-something_else` 
+   or other branches as normal and merge them into your `v0.0.1` branch when happy
+   - When you are ready to release the next version of your package, you raise a PR to merge the `v0.0.1` into the 
+   `master` branch. 
+   - Once this is merged into `master`, it again contains the latest version and when the `master` branch is being 
+    built in Jenkins, you should use the Jenkins freestyle job named `Boasy_Pypi_Package_Update` to automatically 
+    deploy it to our PyPi server (see [the section below](#Automatically))
+
 
 **[⬆ back to top](#table-of-contents)**
 
 ## Adding a new package
+
+If you want to add a new package, you have two options, if you have authorization to write to this repository, you can
+add it in [manually](#Manually) following the steps there. The easier approach is to set up your job on Jenkins to add
+the package [automatically](#Automatically) after an update to the `master` branch. Note using the automatic way 
+requires less knowledge but it does require you to conform to the steps in [guidelines](#Guidelines) in terms of how 
+you create the package.
+
+### Automatically
+
+To add a new package automatically, once your `master` branch is being built in Jenkins, you need to add a conditional
+step to the build which does the following:
+
+```text
+
+```
+
+### Manually
 
 Once you've created a new Python package, to add it to the to the list of Python packages, you will need to modify the 
 following file:
@@ -74,7 +125,7 @@ html above. In this folder you will also want to create a new `index.html` file 
   </head>
   <body>
     <h1>Links for package_name</h1>
-    <a href="git+{ssh_git_clone_link}@{branch_name}#egg={package-name}" data-requires-python="&gt;={python_version_required}">{package_name}-{version_number}</a><br/>
+    <a href="git+ssh://git@{package_name}.github.com/nishalparbhu/{package_name}@{branch_name}#egg={package_name}-{version_number}" data-requires-python="&gt;={python_version_required}">{package_name}-{version_number}</a><br/>
   </body>
 </html>
 ```
@@ -101,7 +152,7 @@ To add a new version of a package, simply find the folder of your package in thi
 ```html
   <body>
     <h1>Links for package_name</h1>
-    <a href="git+{ssh_git_clone_link}@{branch_name}#egg={package-name}" data-requires-python="&gt;={python_version_required}">{package_name}-{version_number}</a><br/>
+    <a href="git+ssh://git@{package_name}.github.com/nishalparbhu/{package_name}@{branch_name}#egg={package_name}-{version_number}" data-requires-python="&gt;={python_version_required}">{package_name}-{version_number}</a><br/>
   </body>
 ```
 
