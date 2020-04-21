@@ -59,7 +59,7 @@ We do have a few guidelines that we follow to make creating a package easy and s
    - Your `master` branch is the production latest version of your package
    - You then create a new version of the next version you want to release using the format `v[0-9].[0.9].[0-9]` 
    (e.g. `v0.0.1`) which becomes your stable branch for building the next version
-   - You tag this branch using the git command `git tag -a v0.0.1 -m "Boasy Test Package v0.0.16"` which allows us to 
+   - You tag this branch using the git command `git tag -a version-0.0.1 -m "Boasy Test Package v0.0.1"` which allows us to 
    create a release on Github meaning others can see clearly your changelog for that release of the package
    - You create your `feat-v0.0.1-my_new_change`, `refactor-v0.0.1-using_new_module`, `chore-v0.0.1-something_else` 
    or other branches as normal and merge them into your `v0.0.1` branch when happy
