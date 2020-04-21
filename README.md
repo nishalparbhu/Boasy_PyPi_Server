@@ -58,14 +58,13 @@ We do have a few guidelines that we follow to make creating a package easy and s
 - When creating a package, the workflow should go as follows:
    - Your actual package file must use underscores for the spaces between words not hyphens (to work with pip)
    - Your `master` branch is the production latest version of your package
-   - You then create a new version of the next version you want to release using the format `v[0-9].[0.9].[0-9]` 
-   (e.g. `v0.0.1`) which becomes your stable branch for building the next version
-   - You tag this branch using the git command `git tag -a version-0.0.1 -m "Boasy Test Package v0.0.1"` which allows us to 
-   create a release on Github meaning others can see clearly your changelog for that release of the package
-   - You create your `feat-v0.0.1-my_new_change`, `refactor-v0.0.1-using_new_module`, `chore-v0.0.1-something_else` 
-   or other branches as normal and merge them into your `v0.0.1` branch when happy
-   - When you are ready to release the next version of your package, you raise a PR to merge the `v0.0.1` into the 
-   `master` branch. 
+   - Your `stable` branch is the stable version of your branch that you are currently working on
+   - You create your `feat-my_new_change-{ticket_number}`, `refactor-using_new_module{ticket_number}`,
+    `chore-something_else{ticket_number}` or other branches as normal and merge them into your `stable` branch when happy
+   - When you are ready to release the next version of your package, you need to create a release tag on Github with
+   the version number in the format `v[0-9].[0.9].[0-9]` and associate it to the `stable` branch commit at the point
+   of release. You should also detail in this release what the changes you made were in that update to the package
+   - Once that is done, you can then raise a PR to merge the `stable` branch into the `master` branch. 
    - Once this is merged into `master`, it again contains the latest version and when the `master` branch is being 
     built in Jenkins, you should use the Jenkins freestyle job named `Boasy_Pypi_Package_Update` to automatically 
     deploy it to our PyPi server (see [the section below](#Automatically))
@@ -97,7 +96,7 @@ step to the build which does the following:
     if (env.BRANCH_NAME == 'master') {
       stage('Updated PyPi server with result') {
         PACKAGE_VERSION = sh(
-          script: 'git log --oneline --merges master -1 --grep=v | cut -d"/" -f 2',
+          script: 'git tag | tail -1',
           returnStdout: true
         ).trim()
         echo "Adding package: boasy_test_package with version: ${PACKAGE_VERSION} to the PyPi server"
