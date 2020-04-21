@@ -6,6 +6,7 @@ The source code for a Boasy Python package server for our internal packages whic
 2. [Creating a new package](#Creating-a-new-package)
    - [Guidelines](#Guidelines)
    - [Versioning](#Versioning)
+   - [Dependencies](#Dependencies)
 3. [Adding a new package](#Adding-a-new-package)
 4. [Adding a new version of a package](#Adding-a-new-version-of-a-package)
 
@@ -76,6 +77,16 @@ document regarding semantic versioning https://semver.org/.
 
 This guide gives clear instructions on how to do versioning to ensure that it is clear to the package consumers how your
 package has been updated
+
+### Dependencies
+
+Below are some useful tips we have learnt about dependencies of your packages:
+
+- When you are building a package which has optional dependencies of that package (they don't have to be installed with 
+the package but for certains parts of the package they are required), then we use the `extras_require` field in your
+`setup.py` file. More information on this can be found here: http://peak.telecommunity.com/DevCenter/setuptools#declaring-extras-optional-features-with-their-own-dependencies
+- When you have dependencies of your project, make sure you follow this guide regarding the differences between your 
+`setup.py` `install_requires` section vs a `requirements.txt` file: https://caremad.io/posts/2013/07/setup-vs-requirement/
 
 **[⬆ back to top](#table-of-contents)**
 
