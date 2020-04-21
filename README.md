@@ -5,6 +5,7 @@ The source code for a Boasy Python package server for our internal packages whic
 1. [Downloading a new package](#Downloading-a-new-package)
 2. [Creating a new package](#Creating-a-new-package)
    - [Guidelines](#Guidelines)
+   - [Versioning](#Versioning)
 3. [Adding a new package](#Adding-a-new-package)
 4. [Adding a new version of a package](#Adding-a-new-version-of-a-package)
 
@@ -69,6 +70,13 @@ We do have a few guidelines that we follow to make creating a package easy and s
     built in Jenkins, you should use the Jenkins freestyle job named `Boasy_Pypi_Package_Update` to automatically 
     deploy it to our PyPi server (see [the section below](#Automatically))
 
+### Versioning
+
+In order to keep your versions in check for your new package, we enforce that you follow the guidelines set out by this
+document regarding semantic versioning https://semver.org/.
+
+This guide gives clear instructions on how to do versioning to ensure that it is clear to the package consumers how your
+package has been updated
 
 **[⬆ back to top](#table-of-contents)**
 
