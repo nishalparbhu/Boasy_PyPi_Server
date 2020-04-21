@@ -86,8 +86,23 @@ To add a new package automatically, once your `master` branch is being built in 
 step to the build which does the following:
 
 ```text
-
+    if (env.BRANCH_NAME == 'master') {
+      stage('Updated PyPi server with result') {
+        PACKAGE_VERSION = sh(
+          script: 'git log --oneline --merges master -1 --grep=v | cut -d"/" -f 2',
+          returnStdout: true
+        ).trim()
+        echo "Adding package: boasy_test_package with version: ${PACKAGE_VERSION} to the PyPi server"
+        build job: '../../Boasy_Python/Boasy_Pypi_Package_Update', parameters: [[$class: 'StringParameterValue', name: 'PACKAGE_NAME', value: 'boasy_test_package'], [$class: 'StringParameterValue', name: 'PACKAGE_VERSION', value: "${PACKAGE_VERSION}"]], wait: true, propagate: true
+        echo "Successfully added the package to the PyPi server"
+      }
+    }
 ```
+
+What this does is call the `Boasy_Pypi_Package_Update` job to update the Pypi index with your new package and/or new 
+version of the package. Note if you are implementing this in your pipeline, make sure that you change
+ `boasy_test_package` to the lowercase name of your package with underscores and also that if needed, you change the 
+ relative path of the build job to wherever your project is running run relatively on Jenkins.
 
 ### Manually
 
