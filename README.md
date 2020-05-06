@@ -62,10 +62,10 @@ We do have a few guidelines that we follow to make creating a package easy and s
    - Your `stable` branch is the stable version of your branch that you are currently working on
    - You create your `feat-my_new_change-{ticket_number}`, `refactor-using_new_module{ticket_number}`,
     `chore-something_else{ticket_number}` or other branches as normal and merge them into your `stable` branch when happy
+   - You can then raise a PR to merge the `stable` branch into the `master` branch.
    - When you are ready to release the next version of your package, you need to create a release tag on Github with
-   the version number in the format `v[0-9].[0.9].[0-9]` and associate it to the `stable` branch commit at the point
-   of release. You should also detail in this release what the changes you made were in that update to the package
-   - Once that is done, you can then raise a PR to merge the `stable` branch into the `master` branch. 
+     the version number in the format `v[0-9].[0.9].[0-9]` and associate it to the `stable` branch commit at the point
+     of release. You should also detail in this release what the changes you made were in that update to the package
    - Once this is merged into `master`, it again contains the latest version and when the `master` branch is being 
     built in Jenkins, you should use the Jenkins freestyle job named `Boasy_Pypi_Package_Update` to automatically 
     deploy it to our PyPi server (see [the section below](#Automatically))
@@ -106,12 +106,9 @@ step to the build which does the following:
 ```text
     if (env.BRANCH_NAME == 'master') {
       stage('Updated PyPi server with result') {
-        PACKAGE_VERSION = sh(
-          script: 'git tag | tail -1',
-          returnStdout: true
-        ).trim()
-        echo "Adding package: boasy_test_package with version: ${PACKAGE_VERSION} to the PyPi server"
-        build job: '../../Boasy_Python/Boasy_Pypi_Package_Update', parameters: [[$class: 'StringParameterValue', name: 'PACKAGE_NAME', value: 'boasy_test_package'], [$class: 'StringParameterValue', name: 'PACKAGE_VERSION', value: "${PACKAGE_VERSION}"]], wait: true, propagate: true
+        env.PACKAGE_VERSION = sh(returnStdout: true, script: "git tag --sort version:refname | tail -1").trim()
+        echo "Adding package: my_boasy_package with version: ${PACKAGE_VERSION} to the PyPi server"
+        build job: '../Boasy_Pypi_Package_Update', parameters: [[$class: 'StringParameterValue', name: 'PACKAGE_NAME', value: 'my_boasy_package'], [$class: 'StringParameterValue', name: 'PACKAGE_VERSION', value: "${PACKAGE_VERSION}"]], wait: true, propagate: true
         echo "Successfully added the package to the PyPi server"
       }
     }
@@ -119,9 +116,13 @@ step to the build which does the following:
 
 What this does is call the `Boasy_Pypi_Package_Update` job to update the Pypi index with your new package and/or new 
 version of the package. Note if you are implementing this in your pipeline, make sure that you change
- `boasy_test_package` to the lowercase name of your package with underscores and also that if needed, you change the 
+ `my_boasy_package` to the lowercase name of your package with underscores and also that if needed, you change the 
  relative path of the build job to wherever your project is running run relatively on Jenkins.
 
+**Note**: If you are running a pipeline job, then you will need to go into your configuration for the project and enable
+fetching git tags by choosing `Advanced clone behaviours` and then ensuring that `fetch tags` is ticked.
+
+ 
 ### Manually
 
 Once you've created a new Python package, to add it to the to the list of Python packages, you will need to modify the 
